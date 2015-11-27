@@ -1,4 +1,4 @@
-package com.ubs.opsit.interviews.support;
+package pl.rafalmag.gameoflife.support;
 
 import org.apache.commons.io.filefilter.DirectoryFileFilter;
 import org.apache.commons.io.filefilter.WildcardFileFilter;
@@ -12,6 +12,7 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Enumeration;
 import java.util.List;
+import java.util.stream.Collectors;
 
 import static org.apache.commons.io.FileUtils.listFiles;
 
@@ -19,15 +20,11 @@ import static org.apache.commons.io.FileUtils.listFiles;
  * A class to help us find stories (files) across a classpath with many roots.  This is especially important
  * when finding files when executed from a Gradle test context.
  */
-public final class ClasspathStoryFinder {
+public class ClasspathStoryFinder {
     private static final Logger LOG = LoggerFactory.getLogger(ClasspathStoryFinder.class);
 
     public static List<String> findFilenamesThatMatch(String aFilenameWithWildcards) {
-        List<String> filenames = new ArrayList<String>();
-        for (File file : findFilesThatMatch(aFilenameWithWildcards)) {
-            filenames.add(file.toURI().toString());
-        }
-        return filenames;
+        return findFilesThatMatch(aFilenameWithWildcards).stream().map(file -> file.toURI().toString()).collect(Collectors.toList());
     }
 
     private static Collection<File> findFilesThatMatch(String aFilenameWithWildcards) {
@@ -35,23 +32,23 @@ public final class ClasspathStoryFinder {
         List<File> rootDirsToSearchFrom = getRootDirs();
         LOG.info("Searching for stories called [{}] in [{}]", aFilenameWithWildcards, rootDirsToSearchFrom);
 
-        List<File> ret = new ArrayList<File>() ;
+        List<File> ret = new ArrayList<>();
         for (File f : rootDirsToSearchFrom) {
-            ret.addAll(listFiles(f, regexFileFilter, DirectoryFileFilter.DIRECTORY)) ;
+            ret.addAll(listFiles(f, regexFileFilter, DirectoryFileFilter.DIRECTORY));
         }
-        return ret ;
+        return ret;
     }
 
     private static List<File> getRootDirs() {
-        List<File> ret = new ArrayList<File>() ;
+        List<File> ret = new ArrayList<>();
         try {
-            Enumeration<URL> roots = ClasspathStoryFinder.class.getClassLoader().getResources("") ;
-            while(roots.hasMoreElements()) {
-                ret.add(new File(roots.nextElement().getFile())) ;
+            Enumeration<URL> roots = ClasspathStoryFinder.class.getClassLoader().getResources("");
+            while (roots.hasMoreElements()) {
+                ret.add(new File(roots.nextElement().getFile()));
             }
-        } catch(IOException ioe) {
-            LOG.error("Failed to derive classpath from Class Loader", ioe) ;
+        } catch (IOException ioe) {
+            LOG.error("Failed to derive classpath from Class Loader", ioe);
         }
-        return ret ;
+        return ret;
     }
 }

@@ -1,4 +1,4 @@
-package com.ubs.opsit.interviews.support;
+package pl.rafalmag.gameoflife.support;
 
 import org.jbehave.core.ConfigurableEmbedder;
 import org.jbehave.core.configuration.Configuration;
@@ -23,12 +23,10 @@ import static org.jbehave.core.reporters.Format.HTML;
 /**
  * A class to fully encapsulates all of the JBehave plumbing behind a builder style API.  The expected use for this would be:
  * {code}aBehaviouralTestRunner().usingStepsFrom(this).withStory("your.story").run(){code}
- *
  */
-public final class BehaviouralTestEmbedder extends ConfigurableEmbedder {
+public class BehaviouralTestEmbedder extends ConfigurableEmbedder {
 
     private static final Logger LOG = LoggerFactory.getLogger(BehaviouralTestEmbedder.class);
-    public static final String BAD_USE_OF_API_MESSAGE = "You are trying to set the steps factory twice ... this is a paradox";
 
     private String wildcardStoryFilename;
     private InjectableStepsFactory stepsFactory;
