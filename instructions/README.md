@@ -1,6 +1,6 @@
 # Instructions
 
-## Things to do to prepare for the UBS interview
+## Things to do to prepare for the interview
  - ensure that your machine has a Java JDK installed on it (we are assuming Java 8 will be used)
  - install an IDE of your choice to perform the interview (we have used Jetbrains Intellij)
  - included with this archive is an example project that is built using gradle, before the interview you should familiarise yourself with working on a Gradle project in the IDE of your choice.
