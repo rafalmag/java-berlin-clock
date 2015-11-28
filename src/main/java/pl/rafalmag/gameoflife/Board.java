@@ -8,5 +8,11 @@ public interface Board {
      */
     Board evolve();
 
-    // TODO feel free to add extra methods
+    void setAlive(int x,int y);
+    void setDead(int x,int y);
+
+    boolean isAlive(int x,int y);
+    boolean isDead(int x,int y);
+
+    State get(int x,int y);
 }
