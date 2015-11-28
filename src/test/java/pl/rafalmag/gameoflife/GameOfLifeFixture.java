@@ -4,6 +4,7 @@ import org.jbehave.core.annotations.Given;
 import org.jbehave.core.annotations.Then;
 import org.jbehave.core.annotations.When;
 import org.junit.Test;
+import pl.rafalmag.gameoflife.impl.StringBoardConverter;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static pl.rafalmag.gameoflife.support.BehaviouralTestEmbedder.aBehaviouralTestRunner;
@@ -15,13 +16,12 @@ import static pl.rafalmag.gameoflife.support.BehaviouralTestEmbedder.aBehavioura
  */
 public class GameOfLifeFixture {
 
-    // TODO assign implementation
-    private BoardConverter<String> boardConverter;
+    private BoardConverter<String> boardConverter = new StringBoardConverter();
     private Board previousBoard;
     private Board currentBoard;
 
     @Test
-    public void berlinClockAcceptanceTests() throws Exception {
+    public void gameOfLifeAcceptanceTests() throws Exception {
         aBehaviouralTestRunner()
                 .usingStepsFrom(this)
                 .withStory("game-of-life.story")
