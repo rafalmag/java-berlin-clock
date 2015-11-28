@@ -21,7 +21,7 @@ public class GameOfLifeFixture {
     private Board currentBoard;
 
     @Test
-    public void berlinClockAcceptanceTests() throws Exception {
+    public void gameOfLifeAcceptanceTests() throws Exception {
         aBehaviouralTestRunner()
                 .usingStepsFrom(this)
                 .withStory("game-of-life.story")
