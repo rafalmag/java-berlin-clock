@@ -5,6 +5,10 @@ import pl.rafalmag.gameoflife.Board;
 import pl.rafalmag.gameoflife.Bounds;
 import pl.rafalmag.gameoflife.GameOfLife;
 
+import java.util.Arrays;
+import java.util.Collection;
+import java.util.stream.IntStream;
+
 import static com.google.common.base.Preconditions.checkArgument;
 
 public class GameOfLifeOnGuavaBoard implements GameOfLife {
@@ -13,15 +17,15 @@ public class GameOfLifeOnGuavaBoard implements GameOfLife {
         checkArgument(currentStepBoard != null, "board cannot be null");
         Board nextStepBoard = new GuavaTableBoard();
         Bounds bounds = currentStepBoard.getBounds();
-        for (int x = bounds.minX; x <= bounds.maxX; x++) {
-            for (int y = bounds.minY; y <= bounds.maxY; y++) {
-                if (shouldLive(currentStepBoard, x, y)) {
-                    nextStepBoard.setAlive(x, y);
-                } else {
-                    nextStepBoard.setDead(x, y);
-                }
-            }
-        }
+        IntStream.rangeClosed(bounds.minX, bounds.maxX).forEach(x ->
+                IntStream.rangeClosed(bounds.minY, bounds.maxY).forEach(y -> {
+                    if (shouldLive(currentStepBoard, x, y)) {
+                        nextStepBoard.setAlive(x, y);
+                    } else {
+                        nextStepBoard.setDead(x, y);
+                    }
+                })
+        );
         return nextStepBoard;
     }
 
@@ -34,28 +38,38 @@ public class GameOfLifeOnGuavaBoard implements GameOfLife {
         }
     }
 
-    @VisibleForTesting
-    int countNeighbours(Board board, int x, int y) {
-        int neighbours = 0;
-        // 1st row
-        neighbours += isAliveToInt(board, x - 1, y - 1);
-        neighbours += isAliveToInt(board, x + 0, y - 1);
-        neighbours += isAliveToInt(board, x + 1, y - 1);
-        // 2nd row
-        neighbours += isAliveToInt(board, x - 1, y);
-        neighbours += isAliveToInt(board, x + 1, y);
-        // 3rd row
-        neighbours += isAliveToInt(board, x - 1, y + 1);
-        neighbours += isAliveToInt(board, x + 0, y + 1);
-        neighbours += isAliveToInt(board, x + 1, y + 1);
-        return neighbours;
-    }
+    private static class Coordinate {
+        final int x, y;
 
-    private int isAliveToInt(Board board, int x, int y) {
-        if (board.isAlive(x, y)) {
-            return 1;
-        } else {
-            return 0;
+        public Coordinate(int x, int y) {
+            this.x = x;
+            this.y = y;
+        }
+
+        public Coordinate move(Coordinate vector) {
+            return new Coordinate(x + vector.x, y + vector.y);
         }
     }
+
+    private static final Collection<Coordinate> NEIGHBORS_RELATIVE_COORDINATES = Arrays.asList(
+            new Coordinate(-1, -1), // left top
+            new Coordinate(-1, 0), // left middle
+            new Coordinate(-1, +1), // left bottom
+            new Coordinate(0, -1), // top
+            new Coordinate(0, +1), // bottom
+            new Coordinate(+1, -1), // right top
+            new Coordinate(+1, 0), // right middle
+            new Coordinate(+1, +1)  // right bottom
+    );
+
+    @VisibleForTesting
+    int countNeighbours(final Board board, int x, int y) {
+        Coordinate origin = new Coordinate(x, y);
+        return NEIGHBORS_RELATIVE_COORDINATES
+                .parallelStream()
+                .map(origin::move)
+                .mapToInt(coordinate -> board.isAlive(coordinate.x, coordinate.y) ? 1 : 0)
+                .sum();
+    }
+
 }
