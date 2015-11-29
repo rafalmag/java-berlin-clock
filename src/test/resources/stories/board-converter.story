@@ -4,7 +4,7 @@ Meta:
 @scope interview
 
 Narrative:
-    String form of board should be loaded to object
+    String form of board should be loaded to object. First declared point is assumed to be at 0,0 position.
 
 Given board
 .XX
