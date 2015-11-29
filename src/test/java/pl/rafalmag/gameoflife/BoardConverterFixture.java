@@ -1,6 +1,5 @@
 package pl.rafalmag.gameoflife;
 
-import org.assertj.core.api.Assertions;
 import org.jbehave.core.annotations.Given;
 import org.jbehave.core.annotations.Then;
 import org.jbehave.core.annotations.When;
@@ -24,22 +23,26 @@ public class BoardConverterFixture {
     }
 
     @Given("board $")
-    public void givenBoard(String boardAsString){
+    public void givenBoard(String boardAsString) {
         this.boardAsString = boardAsString;
     }
 
     @When("it is converted")
-    public void whenItIsConverted(){
+    public void whenItIsConverted() {
         board = boardConverter.convert(boardAsString);
     }
 
     @Then("x=$x,y=$y should be dead")
-    public void thenShouldBeDead(int x, int y){
-        assertThat(board.isDead(x,y));
+    public void thenShouldBeDead(int x, int y) {
+        assertThat(board.isDead(x, y)).isTrue();
+        assertThat(board.isAlive(x, y)).isFalse();
+        assertThat(board.get(x, y)).isEqualTo(State.DEAD);
     }
 
     @Then("x=$x,y=$y should be alive")
-    public void thenShouldBeAlive(int x, int y){
-        assertThat(board.isAlive(x,y));
+    public void thenShouldBeAlive(int x, int y) {
+        assertThat(board.isAlive(x, y)).isTrue();
+        assertThat(board.isDead(x, y)).isFalse();
+        assertThat(board.get(x, y)).isEqualTo(State.ALIVE);
     }
 }

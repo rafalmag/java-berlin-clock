@@ -1,9 +1,14 @@
 package pl.rafalmag.gameoflife.impl;
 
+import com.google.common.base.MoreObjects;
+import com.google.common.collect.TreeBasedTable;
 import pl.rafalmag.gameoflife.Board;
 import pl.rafalmag.gameoflife.State;
 
 public class GuavaTableBoard implements Board {
+
+    private final TreeBasedTable<Integer, Integer, State> table = TreeBasedTable.create();
+
     @Override
     public Board evolve() {
         throw new UnsupportedOperationException("todo");
@@ -11,26 +16,26 @@ public class GuavaTableBoard implements Board {
 
     @Override
     public void setAlive(int x, int y) {
-        throw new UnsupportedOperationException("todo");
+        table.put(x, y, State.ALIVE);
     }
 
     @Override
     public void setDead(int x, int y) {
-        throw new UnsupportedOperationException("todo");
+        table.put(x, y, State.DEAD);
     }
 
     @Override
     public boolean isAlive(int x, int y) {
-        throw new UnsupportedOperationException("todo");
+        return get(x, y) == State.ALIVE;
     }
 
     @Override
     public boolean isDead(int x, int y) {
-        throw new UnsupportedOperationException("todo");
+        return get(x, y) == State.DEAD;
     }
 
     @Override
     public State get(int x, int y) {
-        throw new UnsupportedOperationException("todo");
+        return MoreObjects.firstNonNull(table.get(x, y), State.DEAD);
     }
 }

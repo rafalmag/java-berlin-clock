@@ -12,13 +12,20 @@ public class StringBoardConverter implements BoardConverter<String> {
     public Board convert(String boardAsString) {
         Board board = new GuavaTableBoard();
         List<String> lines = Splitter.onPattern("[\r\n]+").trimResults().omitEmptyStrings().splitToList(boardAsString);
-        for (int x = 0; x < lines.size(); x++) {
-            Preconditions.checkState(lines.get(x).matches("[X.]+"),
-                    "Board input should contain only 'X' or '.' chars, given line (" + x + "):" + lines.get(x));
-            char[] chars = lines.get(x).toCharArray();
-            for (int y = 0; y < chars.length; y++) {
-                if (chars[y] == 'X') {
-                    board.setAlive(x, y);
+        for (int y = 0; y < lines.size(); y++) {
+            Preconditions.checkState(lines.get(y).matches("[X.]+"),
+                    "Board input should contain only 'X' or '.' chars, given line (" + y + "):" + lines.get(y));
+            char[] chars = lines.get(y).toCharArray();
+            for (int x = 0; x < chars.length; x++) {
+                switch (chars[x]) {
+                    case 'X':
+                        board.setAlive(x, y);
+                        break;
+                    case '.':
+                        board.setDead(x, y);
+                        break;
+                    default:
+                        throw new IllegalArgumentException("board character " + chars[y] + " not supported");
                 }
             }
         }
