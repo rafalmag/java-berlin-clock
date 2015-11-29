@@ -10,4 +10,6 @@ public interface Board {
 
     boolean isDead(int x, int y);
 
+    Bounds getBounds();
+
 }
