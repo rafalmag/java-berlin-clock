@@ -49,4 +49,12 @@ X.X
 When it evolves
 Then it is still
 
-
+Scenario: Blinker at a side of the declared board
+Given board
+.X
+.X
+.X
+When it evolves
+Then the board should look like
+...
+XXX

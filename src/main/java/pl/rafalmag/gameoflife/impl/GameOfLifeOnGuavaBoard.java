@@ -16,7 +16,8 @@ public class GameOfLifeOnGuavaBoard implements GameOfLife {
     public Board evolve(Board currentStepBoard) {
         checkArgument(currentStepBoard != null, "board cannot be null");
         Board nextStepBoard = new GuavaTableBoard();
-        Bounds bounds = currentStepBoard.getBounds();
+        Bounds bounds = createEnlargedBy1Board(currentStepBoard.getBounds());
+
         IntStream.rangeClosed(bounds.minX, bounds.maxX).forEach(x ->
                 IntStream.rangeClosed(bounds.minY, bounds.maxY).forEach(y -> {
                     if (shouldLive(currentStepBoard, x, y)) {
@@ -27,6 +28,15 @@ public class GameOfLifeOnGuavaBoard implements GameOfLife {
                 })
         );
         return nextStepBoard;
+    }
+
+    private Bounds createEnlargedBy1Board(Bounds bounds) {
+        Bounds expandedBounds = new Bounds();
+        expandedBounds.minX = bounds.minX - 1;
+        expandedBounds.minY = bounds.minY - 1;
+        expandedBounds.maxX = bounds.maxX + 1;
+        expandedBounds.maxY = bounds.maxY + 1;
+        return expandedBounds;
     }
 
     private boolean shouldLive(Board board, int x, int y) {
