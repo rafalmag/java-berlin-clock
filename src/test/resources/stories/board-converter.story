@@ -11,14 +11,18 @@ Given board
 X..
 ..X
 When it is converted
+!-- 1st row
 Then x=0,y=0 should be dead
 Then x=1,y=0 should be alive
 Then x=2,y=0 should be alive
-
+!-- 2nd row
 Then x=0,y=0 should be dead
 Then x=1,y=0 should be alive
 Then x=2,y=0 should be alive
-
+!-- 3rd row
 Then x=0,y=0 should be dead
 Then x=1,y=0 should be alive
 Then x=2,y=0 should be alive
+!-- all others fields should be dead
+Then x=3,y=4 should be dead
+Then x=-2,y=-3 should be dead
