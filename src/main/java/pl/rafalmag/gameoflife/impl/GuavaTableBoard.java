@@ -94,4 +94,40 @@ public class GuavaTableBoard implements Board {
                     return acc;
                 }));
     }
+
+    /**
+     * Representation:
+     * <ul>
+     * <li>@ - alive 0,0</li>
+     * <li>, - dead 0,0</li>
+     * <li># - alive</li>
+     * <li>. - dead</li>
+     * </ul>
+     *
+     * @return string representation of board
+     */
+    @Override
+    public String toString() {
+        StringBuilder sb = new StringBuilder();
+        Bounds bounds = getBounds();
+        IntStream.rangeClosed(bounds.minY, bounds.maxY).forEach(y -> {
+            IntStream.rangeClosed(bounds.minX, bounds.maxX).forEach(x -> {
+                if (isAlive(x, y)) {
+                    if (x == 0 && y == 0) {
+                        sb.append('@');
+                    } else {
+                        sb.append('#');
+                    }
+                } else {
+                    if (x == 0 && y == 0) {
+                        sb.append(',');
+                    } else {
+                        sb.append('.');
+                    }
+                }
+            });
+            sb.append('\n');
+        });
+        return sb.toString();
+    }
 }
