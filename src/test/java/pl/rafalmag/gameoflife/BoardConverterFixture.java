@@ -29,20 +29,18 @@ public class BoardConverterFixture {
 
     @When("it is converted")
     public void whenItIsConverted() {
-        board = boardConverter.convert(boardAsString);
+        board = boardConverter.convertFrom(boardAsString);
     }
 
     @Then("x=$x,y=$y should be dead")
     public void thenShouldBeDead(int x, int y) {
         assertThat(board.isDead(x, y)).isTrue();
         assertThat(board.isAlive(x, y)).isFalse();
-        assertThat(board.get(x, y)).isEqualTo(State.DEAD);
     }
 
     @Then("x=$x,y=$y should be alive")
     public void thenShouldBeAlive(int x, int y) {
         assertThat(board.isAlive(x, y)).isTrue();
         assertThat(board.isDead(x, y)).isFalse();
-        assertThat(board.get(x, y)).isEqualTo(State.ALIVE);
     }
 }

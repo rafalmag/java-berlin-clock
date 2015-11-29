@@ -8,8 +8,9 @@ import pl.rafalmag.gameoflife.BoardConverter;
 import java.util.List;
 
 public class StringBoardConverter implements BoardConverter<String> {
+
     @Override
-    public Board convert(String boardAsString) {
+    public Board convertFrom(String boardAsString) {
         Board board = new GuavaTableBoard();
         List<String> lines = Splitter.onPattern("[\r\n]+").trimResults().omitEmptyStrings().splitToList(boardAsString);
         for (int y = 0; y < lines.size(); y++) {
@@ -32,8 +33,4 @@ public class StringBoardConverter implements BoardConverter<String> {
         return board;
     }
 
-    @Override
-    public String convert(Board board) {
-        throw new UnsupportedOperationException("todo");
-    }
 }

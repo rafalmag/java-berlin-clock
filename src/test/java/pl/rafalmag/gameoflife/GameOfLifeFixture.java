@@ -11,12 +11,17 @@ import static pl.rafalmag.gameoflife.support.BehaviouralTestEmbedder.aBehavioura
 
 /**
  * Acceptance test class that uses the JBehave (Gerkin) syntax for writing stories.
- * You should only provide BoardConverter implementation,
+ *
+ * You should only provide BoardConverter and GameOfLife implementation,
  * this is your definition of done.
  */
 public class GameOfLifeFixture {
 
     private BoardConverter<String> boardConverter = new StringBoardConverter();
+
+    // TODO initialize with game of life implementation
+    private GameOfLife gameOfLife;
+
     private Board previousBoard;
     private Board currentBoard;
 
@@ -29,19 +34,19 @@ public class GameOfLifeFixture {
     }
 
     @Given("board $")
-    public void givenBoard(String boardAsString){
-        currentBoard = boardConverter.convert(boardAsString);
+    public void givenBoard(String boardAsString) {
+        currentBoard = boardConverter.convertFrom(boardAsString);
     }
 
     @When("it evolves")
     public void whenItEvolves() {
         previousBoard = currentBoard;
-        currentBoard = previousBoard.evolve();
+        currentBoard = gameOfLife.evolve(previousBoard);
     }
 
     @Then("the board should look like $")
     public void thenBoardShouldLookLike(String boardAsString) {
-        assertThat(boardConverter.convert(boardAsString)).isEqualTo(currentBoard);
+        assertThat(boardConverter.convertFrom(boardAsString)).isEqualTo(currentBoard);
     }
 
     @Then("it is still")
