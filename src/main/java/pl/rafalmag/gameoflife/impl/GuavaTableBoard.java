@@ -9,6 +9,7 @@ import pl.rafalmag.gameoflife.State;
 
 import java.util.SortedSet;
 import java.util.TreeSet;
+import java.util.stream.IntStream;
 
 public class GuavaTableBoard implements Board {
 
@@ -48,5 +49,49 @@ public class GuavaTableBoard implements Board {
 
     public State get(int x, int y) {
         return MoreObjects.firstNonNull(table.get(x, y), State.DEAD);
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) {
+            return true;
+        }
+        if (!(o instanceof Board)) {
+            return false;
+        }
+        Board that = (Board) o;
+        return !containsNotMatchingFields(that);
+    }
+
+    private Bounds getCommonBoundsWith(Board board) {
+        Bounds thisBounds = getBounds();
+        Bounds thatBounds = board.getBounds();
+        Bounds commonBounds = new Bounds();
+        commonBounds.minX = Math.min(thisBounds.minX, thatBounds.minX);
+        commonBounds.maxX = Math.max(thisBounds.maxX, thatBounds.maxX);
+        commonBounds.minY = Math.min(thisBounds.minY, thatBounds.minY);
+        commonBounds.maxY = Math.max(thisBounds.maxY, thatBounds.maxY);
+        return commonBounds;
+    }
+
+    private boolean containsNotMatchingFields(Board that) {
+        Bounds commonBounds = getCommonBoundsWith(that);
+        return IntStream.rangeClosed(commonBounds.minX, commonBounds.maxX)
+                .filter(x -> IntStream.rangeClosed(commonBounds.minY, commonBounds.maxY)
+                        .filter(y -> isAlive(x, y) != that.isAlive(x, y))
+                        .findAny().isPresent())
+                .findAny().isPresent();
+    }
+
+    @Override
+    public int hashCode() {
+        Bounds bounds = getBounds();
+        return IntStream.rangeClosed(bounds.minX, bounds.maxX).reduce(0, (hash, x) ->
+                hash += IntStream.rangeClosed(bounds.minY, bounds.maxY).reduce(0, (acc, y) -> {
+                    if (isAlive(x, y)) {
+                        acc += (100 * x + y);
+                    }
+                    return acc;
+                }));
     }
 }
