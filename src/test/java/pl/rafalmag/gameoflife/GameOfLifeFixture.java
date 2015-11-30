@@ -45,12 +45,17 @@ public class GameOfLifeFixture {
     }
 
     @Then("the board should look like $")
-    public void thenBoardShouldLookLike(String boardAsString) {
-        assertThat(boardConverter.convertFrom(boardAsString)).isEqualTo(currentBoard);
+    public void thenBoardShouldLookLike(String expectedBoardAsString) {
+        Board expectedBoard = boardConverter.convertFrom(expectedBoardAsString);
+        assertThat(currentBoard).isEqualTo(expectedBoard);
+        assertThat(currentBoard.hashCode()).isEqualTo(expectedBoard.hashCode());
+        assertThat(currentBoard.toString()).isEqualTo(expectedBoard.toString());
     }
 
     @Then("it is still")
     public void thenItIsStill() {
         assertThat(currentBoard).isEqualTo(previousBoard);
+        assertThat(currentBoard.hashCode()).isEqualTo(previousBoard.hashCode());
+        assertThat(currentBoard.toString()).isEqualTo(previousBoard.toString());
     }
 }
