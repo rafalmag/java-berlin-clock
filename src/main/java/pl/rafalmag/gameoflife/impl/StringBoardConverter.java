@@ -7,6 +7,13 @@ import pl.rafalmag.gameoflife.BoardConverter;
 
 import java.util.List;
 
+/**
+ * String to board converter.
+ *
+ * Hardcoded usage of GuavaTableBoard could be extracted to factory,
+ * but this would not add any benefit to such small project
+ * especially without dependency injection framework.
+ */
 public class StringBoardConverter implements BoardConverter<String> {
 
     @Override

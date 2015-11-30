@@ -1,7 +1,7 @@
 package pl.rafalmag.gameoflife;
 
 /**
- * Bounds of for game of life board
+ * Bounds of for game of life board. Immutable class.
  */
 public class Bounds {
     private final int minX, minY, maxX, maxY;
@@ -27,5 +27,27 @@ public class Bounds {
 
     public int getMaxY() {
         return maxY;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+
+        Bounds bounds = (Bounds) o;
+
+        if (minX != bounds.minX) return false;
+        if (minY != bounds.minY) return false;
+        if (maxX != bounds.maxX) return false;
+        return maxY == bounds.maxY;
+    }
+
+    @Override
+    public int hashCode() {
+        int result = minX;
+        result = 31 * result + minY;
+        result = 31 * result + maxX;
+        result = 31 * result + maxY;
+        return result;
     }
 }

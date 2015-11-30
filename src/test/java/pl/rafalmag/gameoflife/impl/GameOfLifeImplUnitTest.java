@@ -10,11 +10,14 @@ import pl.rafalmag.gameoflife.BoardConverter;
 import static org.assertj.core.api.Assertions.assertThat;
 import static pl.rafalmag.gameoflife.support.BehaviouralTestEmbedder.aBehaviouralTestRunner;
 
-public class GameOfLifeOnGuavaBoardUnitTest {
+/**
+ * Unit test of {@link GameOfLifeImpl} implemented using JBehave.
+ */
+public class GameOfLifeImplUnitTest {
 
     private BoardConverter<String> boardConverter = new StringBoardConverter();
 
-    private GameOfLifeOnGuavaBoard gameOfLife = new GameOfLifeOnGuavaBoard();
+    private GameOfLifeImpl gameOfLife = new GameOfLifeImpl();
 
     private Board board;
     private int neighbours;
@@ -23,7 +26,7 @@ public class GameOfLifeOnGuavaBoardUnitTest {
     public void gameOfLifeOnGuavaBoardTests() throws Exception {
         aBehaviouralTestRunner()
                 .usingStepsFrom(this)
-                .withStory("game-of-life-on-guava-board.story")
+                .withStory("game-of-life-impl-unit-test.story")
                 .run();
     }
 

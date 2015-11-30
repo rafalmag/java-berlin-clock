@@ -1,5 +1,9 @@
 package pl.rafalmag.gameoflife;
 
+/**
+ * Helper method to build {@link Bounds}.
+ * The meaning of {@link Bounds} 4 args constructor can be hard to read and error prone.
+ */
 public class BoundsBuilder {
     private int minX, minY, maxX, maxY;
 

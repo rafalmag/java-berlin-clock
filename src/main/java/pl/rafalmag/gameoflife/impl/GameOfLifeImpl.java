@@ -12,7 +12,15 @@ import java.util.stream.IntStream;
 
 import static com.google.common.base.Preconditions.checkArgument;
 
-public class GameOfLifeOnGuavaBoard implements GameOfLife {
+/**
+ * Game of life evolution implementation.
+ *
+ * Hardcoded usage of GuavaTableBoard could be extracted to factory,
+ * but this would not add any benefit to such small project
+ * especially without dependency injection framework.
+ */
+public class GameOfLifeImpl implements GameOfLife {
+
     @Override
     public Board evolve(Board currentStepBoard) {
         checkArgument(currentStepBoard != null, "board cannot be null");

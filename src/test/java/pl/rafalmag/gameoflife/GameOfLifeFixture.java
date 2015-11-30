@@ -4,7 +4,7 @@ import org.jbehave.core.annotations.Given;
 import org.jbehave.core.annotations.Then;
 import org.jbehave.core.annotations.When;
 import org.junit.Test;
-import pl.rafalmag.gameoflife.impl.GameOfLifeOnGuavaBoard;
+import pl.rafalmag.gameoflife.impl.GameOfLifeImpl;
 import pl.rafalmag.gameoflife.impl.StringBoardConverter;
 
 import static org.assertj.core.api.Assertions.assertThat;
@@ -20,7 +20,7 @@ public class GameOfLifeFixture {
 
     private BoardConverter<String> boardConverter = new StringBoardConverter();
 
-    private GameOfLife gameOfLife = new GameOfLifeOnGuavaBoard();
+    private GameOfLife gameOfLife = new GameOfLifeImpl();
 
     private Board previousBoard;
     private Board currentBoard;

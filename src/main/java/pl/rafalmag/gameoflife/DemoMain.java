@@ -4,7 +4,7 @@ import com.google.common.base.Charsets;
 import com.google.common.io.Resources;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import pl.rafalmag.gameoflife.impl.GameOfLifeOnGuavaBoard;
+import pl.rafalmag.gameoflife.impl.GameOfLifeImpl;
 import pl.rafalmag.gameoflife.impl.StringBoardConverter;
 
 import java.io.IOException;
@@ -23,7 +23,7 @@ public class DemoMain {
         String boardAsString = Resources.toString(url, Charsets.UTF_8);
         Board board = new StringBoardConverter().convertFrom(boardAsString);
         LOG.info("Board from file evolutions. Infinite loop, terminate the application (CTRL+C) to stop");
-        GameOfLife gameOfLife = new GameOfLifeOnGuavaBoard();
+        GameOfLife gameOfLife = new GameOfLifeImpl();
         for (int i = 0; ; i++) {
             LOG.info("Board in evolution {}:\n{}", i, board);
             board = gameOfLife.evolve(board);
