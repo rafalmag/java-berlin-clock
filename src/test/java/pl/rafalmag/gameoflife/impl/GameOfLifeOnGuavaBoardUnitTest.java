@@ -3,7 +3,6 @@ package pl.rafalmag.gameoflife.impl;
 import org.jbehave.core.annotations.Given;
 import org.jbehave.core.annotations.Then;
 import org.jbehave.core.annotations.When;
-import org.jbehave.core.junit.JUnitStory;
 import org.junit.Test;
 import pl.rafalmag.gameoflife.Board;
 import pl.rafalmag.gameoflife.BoardConverter;
