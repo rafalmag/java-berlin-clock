@@ -22,7 +22,12 @@ public class GuavaTableBoard implements Board {
 
     @Override
     public void setDead(int x, int y) {
-        table.put(x, y, State.DEAD);
+        State state = table.get(x, y);
+        if(state == State.ALIVE) {
+            // memory optimization as in table we only need to store alive nodes,
+            // all others are implicitly dead
+            table.put(x, y, State.DEAD);
+        }
     }
 
     @Override

@@ -23,6 +23,10 @@ public class GameOfLifeOnGuavaBoard implements GameOfLife {
                     if (shouldLive(currentStepBoard, x, y)) {
                         nextStepBoard.setAlive(x, y);
                     } else {
+                        // this step could be omitted,
+                        // (as in new board all fields are implicitly "dead"
+                        // if not previously explicitly declared as alive).
+                        // left for code/algorithm clarity
                         nextStepBoard.setDead(x, y);
                     }
                 })
