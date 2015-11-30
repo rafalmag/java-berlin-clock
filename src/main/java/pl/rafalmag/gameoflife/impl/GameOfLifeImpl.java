@@ -5,16 +5,19 @@ import pl.rafalmag.gameoflife.Board;
 import pl.rafalmag.gameoflife.Bounds;
 import pl.rafalmag.gameoflife.BoundsBuilder;
 import pl.rafalmag.gameoflife.GameOfLife;
+import pl.rafalmag.gameoflife.utils.ThreadSafetyUtils;
 
 import java.util.Arrays;
 import java.util.Collection;
+import java.util.concurrent.locks.Lock;
+import java.util.concurrent.locks.ReentrantLock;
 import java.util.stream.IntStream;
 
 import static com.google.common.base.Preconditions.checkArgument;
 
 /**
  * Game of life evolution implementation.
- *
+ * <p>
  * Hardcoded usage of GuavaTableBoard could be extracted to factory,
  * but this would not add any benefit to such small project
  * especially without dependency injection framework.
@@ -27,21 +30,21 @@ public class GameOfLifeImpl implements GameOfLife {
         Board nextStepBoard = new GuavaTableBoard();
         Bounds bounds = createEnlargedBy1Board(currentStepBoard.getBounds());
 
-        IntStream.rangeClosed(bounds.getMinX(), bounds.getMaxX()).forEach(x ->
-                IntStream.rangeClosed(bounds.getMinY(), bounds.getMaxY()).forEach(y -> {
+        Lock lock = new ReentrantLock();
+        IntStream.rangeClosed(bounds.getMinX(), bounds.getMaxX()).parallel().forEach(x ->
+                IntStream.rangeClosed(bounds.getMinY(), bounds.getMaxY()).parallel().forEach(y -> {
                     if (shouldLive(currentStepBoard, x, y)) {
-                        nextStepBoard.setAlive(x, y);
-                    } else {
-                        // this step could be omitted,
-                        // (as in new board all fields are implicitly "dead"
-                        // if not previously explicitly declared as alive).
-                        // left for code/algorithm clarity
-                        nextStepBoard.setDead(x, y);
+                        // to avoid concurrent modification exceptions
+                        ThreadSafetyUtils.synchronizedAction(lock, () -> nextStepBoard.setAlive(x, y));
                     }
+                    // else step could be omitted,
+                    // (as in new board all fields are implicitly "dead"
+                    // if not previously explicitly declared as alive).
                 })
         );
         return nextStepBoard;
     }
+
 
     private Bounds createEnlargedBy1Board(Bounds bounds) {
         return new BoundsBuilder()
