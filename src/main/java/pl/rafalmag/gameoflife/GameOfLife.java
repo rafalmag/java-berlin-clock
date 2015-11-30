@@ -1,5 +1,8 @@
 package pl.rafalmag.gameoflife;
 
+/**
+ * Conway's Game of Life evolution engine.
+ */
 public interface GameOfLife {
 
     /**

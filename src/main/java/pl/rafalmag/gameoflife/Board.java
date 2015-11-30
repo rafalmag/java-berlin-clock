@@ -1,12 +1,10 @@
 package pl.rafalmag.gameoflife;
 
+/**
+ * Representation of unbounded board for game of life.
+ */
 public interface Board {
 
-    void setAlive(int x, int y);
+   // TODO add necessary methods
 
-    void setDead(int x, int y);
-
-    boolean isAlive(int x, int y);
-
-    boolean isDead(int x, int y);
 }
