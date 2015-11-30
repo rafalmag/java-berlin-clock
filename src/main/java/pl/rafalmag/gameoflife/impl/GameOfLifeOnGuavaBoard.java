@@ -47,8 +47,10 @@ public class GameOfLifeOnGuavaBoard implements GameOfLife {
     private boolean shouldLive(Board board, int x, int y) {
         final int neighbours = countNeighbours(board, x, y);
         if (board.isAlive(x, y)) {
+            // Any live cell with two or three live neighbours lives on to the next generation.
             return neighbours == 2 || neighbours == 3;
         } else {
+            // Any dead cell with exactly three live neighbours becomes a live cell, as if by reproduction.
             return neighbours == 3;
         }
     }
@@ -61,7 +63,7 @@ public class GameOfLifeOnGuavaBoard implements GameOfLife {
             this.y = y;
         }
 
-        public Coordinate move(Coordinate vector) {
+        public Coordinate createMovedCoordinateByVector(Coordinate vector) {
             return new Coordinate(x + vector.x, y + vector.y);
         }
     }
@@ -79,10 +81,10 @@ public class GameOfLifeOnGuavaBoard implements GameOfLife {
 
     @VisibleForTesting
     int countNeighbours(final Board board, int x, int y) {
-        Coordinate origin = new Coordinate(x, y);
+        Coordinate originCoordinate = new Coordinate(x, y);
         return NEIGHBORS_RELATIVE_COORDINATES
                 .parallelStream()
-                .map(origin::move)
+                .map(originCoordinate::createMovedCoordinateByVector)
                 .mapToInt(coordinate -> board.isAlive(coordinate.x, coordinate.y) ? 1 : 0)
                 .sum();
     }

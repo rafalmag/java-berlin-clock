@@ -11,6 +11,9 @@ import java.util.SortedSet;
 import java.util.TreeSet;
 import java.util.stream.IntStream;
 
+/**
+ * Game of life board implementation based on {@link TreeBasedTable}.
+ */
 public class GuavaTableBoard implements Board {
 
     private enum State {
@@ -70,7 +73,7 @@ public class GuavaTableBoard implements Board {
             return false;
         }
         Board that = (Board) o;
-        return !containsNotMatchingFields(that);
+        return allAliveFieldsMatch(that);
     }
 
     private Bounds getCommonBoundsWith(Board board) {
@@ -84,13 +87,16 @@ public class GuavaTableBoard implements Board {
                 .build();
     }
 
-    private boolean containsNotMatchingFields(Board that) {
+    private boolean allAliveFieldsMatch(Board that) {
         Bounds commonBounds = getCommonBoundsWith(that);
-        return IntStream.rangeClosed(commonBounds.getMinX(), commonBounds.getMaxX())
-                .filter(x -> IntStream.rangeClosed(commonBounds.getMinY(), commonBounds.getMaxY())
-                        .filter(y -> isAlive(x, y) != that.isAlive(x, y))
-                        .findAny().isPresent())
-                .findAny().isPresent();
+        for (int x = commonBounds.getMinX(); x <= commonBounds.getMaxX(); x++) {
+            for (int y = commonBounds.getMinY(); y <= commonBounds.getMaxY(); y++) {
+                if (isAlive(x, y) != that.isAlive(x, y)) {
+                    return false;
+                }
+            }
+        }
+        return true;
     }
 
     @Override
