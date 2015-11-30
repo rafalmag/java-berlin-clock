@@ -45,12 +45,12 @@ public class GameOfLifeOnGuavaBoardUnitTest {
     private String boardAsString;
 
     @When("printed")
-    public void printed(){
+    public void printed() {
         boardAsString = board.toString();
     }
 
     @Then("should look like this $")
-    public void shouldLookLikeThis(String expectedResult){
+    public void shouldLookLikeThis(String expectedResult) {
         assertThat(boardAsString).isEqualToIgnoringWhitespace(expectedResult);
     }
 }
