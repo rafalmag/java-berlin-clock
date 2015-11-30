@@ -3,6 +3,7 @@ package pl.rafalmag.gameoflife.impl;
 import com.google.common.annotations.VisibleForTesting;
 import pl.rafalmag.gameoflife.Board;
 import pl.rafalmag.gameoflife.Bounds;
+import pl.rafalmag.gameoflife.BoundsBuilder;
 import pl.rafalmag.gameoflife.GameOfLife;
 
 import java.util.Arrays;
@@ -35,7 +36,12 @@ public class GameOfLifeOnGuavaBoard implements GameOfLife {
     }
 
     private Bounds createEnlargedBy1Board(Bounds bounds) {
-        return new Bounds(bounds.getMinX() - 1, bounds.getMinY() - 1, bounds.getMaxX() + 1, bounds.getMaxY() + 1);
+        return new BoundsBuilder()
+                .withMinX(bounds.getMinX() - 1)
+                .withMinY(bounds.getMinY() - 1)
+                .withMaxX(bounds.getMaxX() + 1)
+                .withMaxY(bounds.getMaxY() + 1)
+                .build();
     }
 
     private boolean shouldLive(Board board, int x, int y) {

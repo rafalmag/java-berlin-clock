@@ -5,6 +5,7 @@ import com.google.common.collect.Sets;
 import com.google.common.collect.TreeBasedTable;
 import pl.rafalmag.gameoflife.Board;
 import pl.rafalmag.gameoflife.Bounds;
+import pl.rafalmag.gameoflife.BoundsBuilder;
 
 import java.util.SortedSet;
 import java.util.TreeSet;
@@ -48,7 +49,12 @@ public class GuavaTableBoard implements Board {
     public Bounds getBounds() {
         SortedSet<Integer> rowKeys = table.rowKeySet();
         TreeSet<Integer> columnKeys = Sets.newTreeSet(table.columnKeySet());
-        return new Bounds(rowKeys.first(), columnKeys.first(), rowKeys.last(), columnKeys.last());
+        return new BoundsBuilder()
+                .withMinX(rowKeys.first())
+                .withMinY(columnKeys.first())
+                .withMaxX(rowKeys.last())
+                .withMaxY(columnKeys.last())
+                .build();
     }
 
     public State get(int x, int y) {
@@ -70,11 +76,12 @@ public class GuavaTableBoard implements Board {
     private Bounds getCommonBoundsWith(Board board) {
         Bounds thisBounds = getBounds();
         Bounds thatBounds = board.getBounds();
-        return new Bounds(
-                Math.min(thisBounds.getMinX(), thatBounds.getMinX()),
-                Math.min(thisBounds.getMinY(), thatBounds.getMinY()),
-                Math.max(thisBounds.getMaxX(), thatBounds.getMaxX()),
-                Math.max(thisBounds.getMaxY(), thatBounds.getMaxY()));
+        return new BoundsBuilder()
+                .withMinX(Math.min(thisBounds.getMinX(), thatBounds.getMinX()))
+                .withMinY(Math.min(thisBounds.getMinY(), thatBounds.getMinY()))
+                .withMaxX(Math.max(thisBounds.getMaxX(), thatBounds.getMaxX()))
+                .withMaxY(Math.max(thisBounds.getMaxY(), thatBounds.getMaxY()))
+                .build();
     }
 
     private boolean containsNotMatchingFields(Board that) {
