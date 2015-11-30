@@ -41,4 +41,16 @@ public class GameOfLifeOnGuavaBoardUnitTest {
     public void resultShouldBe(int expectedResult) {
         assertThat(neighbours).isEqualTo(expectedResult);
     }
+
+    private String boardAsString;
+
+    @When("printed")
+    public void printed(){
+        boardAsString = board.toString();
+    }
+
+    @Then("should look like this $")
+    public void shouldLookLikeThis(String expectedResult){
+        assertThat(boardAsString).isEqualToIgnoringWhitespace(expectedResult);
+    }
 }

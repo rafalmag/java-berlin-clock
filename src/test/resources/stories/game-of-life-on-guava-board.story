@@ -6,6 +6,8 @@ Meta:
 Narrative:
     Unit test of internal implementation methods using JBehave.
 
+@Scenario: count neighbours
+
 Given board
 ...
 ...
@@ -26,3 +28,29 @@ Given board
 X.X
 When count x=1, y=1 neighbours
 Then result should be 2
+
+@Scenario: toString
+
+Given board
+X.X
+XX.
+X..
+When printed
+Then should look like this
+First point position (0,0)
+#.#
+##.
+#..
+
+Given board
+....
+....
+..X.
+..X.
+.X.X
+When printed
+Then should look like this
+First point position (1,2)
+.#.
+.#.
+#.#

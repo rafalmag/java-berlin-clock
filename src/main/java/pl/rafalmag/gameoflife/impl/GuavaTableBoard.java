@@ -23,7 +23,7 @@ public class GuavaTableBoard implements Board {
     @Override
     public void setDead(int x, int y) {
         State state = table.get(x, y);
-        if(state == State.ALIVE) {
+        if (state == State.ALIVE) {
             // memory optimization as in table we only need to store alive nodes,
             // all others are implicitly dead
             table.put(x, y, State.DEAD);
@@ -103,8 +103,6 @@ public class GuavaTableBoard implements Board {
     /**
      * Representation:
      * <ul>
-     * <li>@ - alive 0,0</li>
-     * <li>, - dead 0,0</li>
      * <li># - alive</li>
      * <li>. - dead</li>
      * </ul>
@@ -113,24 +111,15 @@ public class GuavaTableBoard implements Board {
      */
     @Override
     public String toString() {
-        StringBuilder sb = new StringBuilder();
         Bounds bounds = getBounds();
+        StringBuilder sb = new StringBuilder("First point position (");
+        sb.append(bounds.minX);
+        sb.append(",");
+        sb.append(bounds.minY);
+        sb.append(")\n");
         IntStream.rangeClosed(bounds.minY, bounds.maxY).forEach(y -> {
-            IntStream.rangeClosed(bounds.minX, bounds.maxX).forEach(x -> {
-                if (isAlive(x, y)) {
-                    if (x == 0 && y == 0) {
-                        sb.append('@');
-                    } else {
-                        sb.append('#');
-                    }
-                } else {
-                    if (x == 0 && y == 0) {
-                        sb.append(',');
-                    } else {
-                        sb.append('.');
-                    }
-                }
-            });
+            IntStream.rangeClosed(bounds.minX, bounds.maxX)
+                    .forEach(x -> sb.append(isAlive(x, y) ? '#' : '.'));
             sb.append('\n');
         });
         return sb.toString();
