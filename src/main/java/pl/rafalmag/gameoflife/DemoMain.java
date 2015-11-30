@@ -11,6 +11,9 @@ import java.io.IOException;
 import java.net.URL;
 import java.util.concurrent.TimeUnit;
 
+/**
+ * Application main class to start it as a standalone application for demo purpose.
+ */
 public class DemoMain {
 
     private static final Logger LOG = LoggerFactory.getLogger(DemoMain.class);

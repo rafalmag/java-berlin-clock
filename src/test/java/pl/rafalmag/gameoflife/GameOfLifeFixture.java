@@ -12,7 +12,7 @@ import static pl.rafalmag.gameoflife.support.BehaviouralTestEmbedder.aBehavioura
 
 /**
  * Acceptance test class that uses the JBehave (Gerkin) syntax for writing stories.
- *
+ * <p>
  * You should only provide BoardConverter and GameOfLife implementation,
  * this is your definition of done.
  */

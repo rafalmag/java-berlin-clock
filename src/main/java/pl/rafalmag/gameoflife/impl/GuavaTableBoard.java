@@ -5,13 +5,17 @@ import com.google.common.collect.Sets;
 import com.google.common.collect.TreeBasedTable;
 import pl.rafalmag.gameoflife.Board;
 import pl.rafalmag.gameoflife.Bounds;
-import pl.rafalmag.gameoflife.State;
 
 import java.util.SortedSet;
 import java.util.TreeSet;
 import java.util.stream.IntStream;
 
 public class GuavaTableBoard implements Board {
+
+    private enum State {
+        ALIVE,
+        DEAD
+    }
 
     private final TreeBasedTable<Integer, Integer, State> table = TreeBasedTable.create();
 
@@ -43,13 +47,8 @@ public class GuavaTableBoard implements Board {
     @Override
     public Bounds getBounds() {
         SortedSet<Integer> rowKeys = table.rowKeySet();
-        Bounds bounds = new Bounds();
-        bounds.minX = rowKeys.first();
-        bounds.maxX = rowKeys.last();
         TreeSet<Integer> columnKeys = Sets.newTreeSet(table.columnKeySet());
-        bounds.minY = columnKeys.first();
-        bounds.maxY = columnKeys.last();
-        return bounds;
+        return new Bounds(rowKeys.first(), columnKeys.first(), rowKeys.last(), columnKeys.last());
     }
 
     public State get(int x, int y) {
@@ -71,18 +70,17 @@ public class GuavaTableBoard implements Board {
     private Bounds getCommonBoundsWith(Board board) {
         Bounds thisBounds = getBounds();
         Bounds thatBounds = board.getBounds();
-        Bounds commonBounds = new Bounds();
-        commonBounds.minX = Math.min(thisBounds.minX, thatBounds.minX);
-        commonBounds.maxX = Math.max(thisBounds.maxX, thatBounds.maxX);
-        commonBounds.minY = Math.min(thisBounds.minY, thatBounds.minY);
-        commonBounds.maxY = Math.max(thisBounds.maxY, thatBounds.maxY);
-        return commonBounds;
+        return new Bounds(
+                Math.min(thisBounds.getMinX(), thatBounds.getMinX()),
+                Math.min(thisBounds.getMinY(), thatBounds.getMinY()),
+                Math.max(thisBounds.getMaxX(), thatBounds.getMaxX()),
+                Math.max(thisBounds.getMaxY(), thatBounds.getMaxY()));
     }
 
     private boolean containsNotMatchingFields(Board that) {
         Bounds commonBounds = getCommonBoundsWith(that);
-        return IntStream.rangeClosed(commonBounds.minX, commonBounds.maxX)
-                .filter(x -> IntStream.rangeClosed(commonBounds.minY, commonBounds.maxY)
+        return IntStream.rangeClosed(commonBounds.getMinX(), commonBounds.getMaxX())
+                .filter(x -> IntStream.rangeClosed(commonBounds.getMinY(), commonBounds.getMaxY())
                         .filter(y -> isAlive(x, y) != that.isAlive(x, y))
                         .findAny().isPresent())
                 .findAny().isPresent();
@@ -91,8 +89,8 @@ public class GuavaTableBoard implements Board {
     @Override
     public int hashCode() {
         Bounds bounds = getBounds();
-        return IntStream.rangeClosed(bounds.minX, bounds.maxX).reduce(0, (hash, x) ->
-                hash += IntStream.rangeClosed(bounds.minY, bounds.maxY).reduce(0, (acc, y) -> {
+        return IntStream.rangeClosed(bounds.getMinX(), bounds.getMaxX()).reduce(0, (hash, x) ->
+                hash += IntStream.rangeClosed(bounds.getMinY(), bounds.getMaxY()).reduce(0, (acc, y) -> {
                     if (isAlive(x, y)) {
                         acc += (100 * x + y);
                     }
@@ -113,12 +111,12 @@ public class GuavaTableBoard implements Board {
     public String toString() {
         Bounds bounds = getBounds();
         StringBuilder sb = new StringBuilder("First point position (");
-        sb.append(bounds.minX);
+        sb.append(bounds.getMinX());
         sb.append(",");
-        sb.append(bounds.minY);
+        sb.append(bounds.getMinY());
         sb.append(")\n");
-        IntStream.rangeClosed(bounds.minY, bounds.maxY).forEach(y -> {
-            IntStream.rangeClosed(bounds.minX, bounds.maxX)
+        IntStream.rangeClosed(bounds.getMinY(), bounds.getMaxY()).forEach(y -> {
+            IntStream.rangeClosed(bounds.getMinX(), bounds.getMaxX())
                     .forEach(x -> sb.append(isAlive(x, y) ? '#' : '.'));
             sb.append('\n');
         });
